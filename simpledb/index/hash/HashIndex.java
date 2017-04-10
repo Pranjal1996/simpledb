@@ -26,6 +26,7 @@ public class HashIndex implements Index {
 	 * @param tx the calling transaction
 	 */
 	public HashIndex(String idxname, Schema sch, Transaction tx) {
+		System.out.println("HashIndex created");
 		this.idxname = idxname;
 		this.sch = sch;
 		this.tx = tx;
@@ -49,6 +50,10 @@ public class HashIndex implements Index {
 		ts = new TableScan(ti, tx);
 	}
 
+	public void beforeFirst(Constant val1, Constant val2){
+		beforeFirst(val1);
+	}
+
 	/**
 	 * Moves to the next record having the search key.
 	 * The method loops through the table scan for the bucket,
@@ -62,6 +67,11 @@ public class HashIndex implements Index {
 				return true;
 		return false;
 	}
+
+	public boolean next(Constant val2){
+		return false;
+	}
+   
 
 	/**
 	 * Retrieves the dataRID from the current record
@@ -79,6 +89,7 @@ public class HashIndex implements Index {
 	 * @see simpledb.index.Index#insert(simpledb.query.Constant, simpledb.record.RID)
 	 */
 	public void insert(Constant val, RID rid) {
+		System.out.println("Insertion into HashIndex");
 		beforeFirst(val);
 		ts.insert();
 		ts.setInt("block", rid.blockNumber());

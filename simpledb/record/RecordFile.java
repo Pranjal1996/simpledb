@@ -80,6 +80,16 @@ public class RecordFile {
    public String getString(String fldname) {
       return rp.getString(fldname);
    }
+
+   /**
+    * Returns the value of the specified field
+    * in the current record.
+    * @param fldname the name of the field
+    * @return the timestamp (long) value at that field
+    */
+   public long getTimestamp(String fldname) {
+      return rp.getTimestamp(fldname);
+   }
    
    /**
     * Sets the value of the specified field 
@@ -99,6 +109,24 @@ public class RecordFile {
     */
    public void setString(String fldname, String val) {
       rp.setString(fldname, val);
+   }
+
+   /**
+    * Sets the value of the specified field 
+    * in the current record.
+    * @param fldname the name of the field
+    * @param val the new value for the field
+    */
+   // public void setTimestamp(String fldname, String val) {
+   //    rp.setTimestamp(fldname, val);
+   // }
+
+   // public void setTimestamp(String fldname, Date val) {
+   //    rp.setTimestamp(fldname, val);
+   // }
+
+   public void setTimestamp(String fldname, long val) {
+      rp.setTimestamp(fldname, val);
    }
    
    /**

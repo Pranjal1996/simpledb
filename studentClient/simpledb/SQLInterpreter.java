@@ -1,6 +1,10 @@
+package studentClient.simpledb;
+
 import java.sql.*;
 import simpledb.remote.SimpleDriver;
 import java.io.*;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 public class SQLInterpreter {
     private static Connection conn = null;
@@ -42,6 +46,7 @@ public class SQLInterpreter {
 
 	private static void doQuery(String cmd) {
 		try {
+
 		    Statement stmt = conn.createStatement();
 		    ResultSet rs = stmt.executeQuery(cmd);
 		    ResultSetMetaData md = rs.getMetaData();
@@ -55,6 +60,7 @@ public class SQLInterpreter {
 				String fmt = "%" + width + "s";
 				System.out.format(fmt, md.getColumnName(i));
 			}
+
 			System.out.println();
 			for(int i=0; i<totalwidth; i++)
 			    System.out.print("-");
@@ -62,18 +68,32 @@ public class SQLInterpreter {
 
 		    // print records
 		    while(rs.next()) {
+			
 				for (int i=1; i<=numcols; i++) {
+			
 					String fldname = md.getColumnName(i);
 					int fldtype = md.getColumnType(i);
 					String fmt = "%" + md.getColumnDisplaySize(i);
+					
 					if (fldtype == Types.INTEGER)
 						System.out.format(fmt + "d", rs.getInt(fldname));
-					else
+					else if (fldtype == Types.VARCHAR)
 						System.out.format(fmt + "s", rs.getString(fldname));
+					else{
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						// System.out.format(fmt + "s", sdf.format(new Date(rs.getLong(fldname))));
+						System.out.format(fmt + "s", sdf.format(new java.util.Date(rs.getDate(fldname).getTime())));
+						//System.out.format(fmt + "s", sdf.format(rs.getDate(fldname)));
+					}
+			
 				}
+			
 				System.out.println();
+			
 			}
+
 			rs.close();
+		
 		}
 		catch (SQLException e) {
 			System.out.println("SQL Exception: " + e.getMessage());

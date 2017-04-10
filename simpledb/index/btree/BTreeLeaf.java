@@ -12,7 +12,7 @@ import simpledb.query.Constant;
 public class BTreeLeaf {
    private TableInfo ti;
    private Transaction tx;
-   private Constant searchkey;
+   private Constant searchkey, val2;
    private BTreePage contents;
    private int currentslot;
    
@@ -25,10 +25,11 @@ public class BTreeLeaf {
     * @param searchkey the search key value
     * @param tx the calling transaction
     */
-   public BTreeLeaf(Block blk, TableInfo ti, Constant searchkey, Transaction tx) {
+   public BTreeLeaf(Block blk, TableInfo ti, Constant searchkey,Constant val2, Transaction tx) {
       this.ti = ti;
       this.tx = tx;
       this.searchkey = searchkey;
+      this.val2 = val2;
       contents = new BTreePage(blk, ti, tx);
       currentslot = contents.findSlotBefore(searchkey);
    }
@@ -54,6 +55,23 @@ public class BTreeLeaf {
          return true;
       else 
          return tryOverflow();
+   }
+
+   /**
+    * Moves to the next leaf record having the 
+    * search key less than val2.
+    * Returns false if there is no more such records.
+    * @return false if there are no more leaf records having search key less than val2
+    */
+   public boolean next(Constant val2) {
+      currentslot++;
+
+      if (currentslot >= contents.getNumRecs()) 
+         return tryOverflow(val2);
+      else if (contents.getDataVal(currentslot).compareTo(val2)<=0)
+         return true;
+      else 
+         return tryOverflow(val2);
    }
    
    /**
@@ -90,11 +108,12 @@ public class BTreeLeaf {
     * @return the directory entry of the newly-split page, if one exists.
     */
    public DirEntry insert(RID datarid) {
-   	// bug fix:  If the page has an overflow page 
-   	// and the searchkey of the new record would be lowest in its page, 
-   	// we need to first move the entire contents of that page to a new block
-   	// and then insert the new record in the now-empty current page.
+    // bug fix:  If the page has an overflow page 
+    // and the searchkey of the new record would be lowest in its page, 
+    // we need to first move the entire contents of that page to a new block
+    // and then insert the new record in the now-empty current page.
    	if (contents.getFlag() >= 0 && contents.getDataVal(0).compareTo(searchkey) > 0) {
+      // System.out.println(" Why is this getting implemented ");
    		Constant firstval = contents.getDataVal(0);
    		Block newblk = contents.split(0, contents.getFlag());
    		currentslot = 0;
@@ -111,28 +130,38 @@ public class BTreeLeaf {
       Constant firstkey = contents.getDataVal(0);
       Constant lastkey  = contents.getDataVal(contents.getNumRecs()-1);
       if (lastkey.equals(firstkey)) {
+        // System.out.println(" Its here but i don't know");
          // create an overflow block to hold all but the first record
+        // System.out.println(" Why is this spllitting " + "1 "+ contents.getFlag());
          Block newblk = contents.split(1, contents.getFlag());
+         // System.out.println("Block no:"+ newblk.number());
          contents.setFlag(newblk.number());
          return null;
       }
       else {
          int splitpos = contents.getNumRecs() / 2;
          Constant splitkey = contents.getDataVal(splitpos);
-         if (splitkey.equals(firstkey)) {
+         if (splitkey.compareTo(firstkey)>=0) {
             // move right, looking for the next key
-            while (contents.getDataVal(splitpos).equals(splitkey))
+            // System.out.println(" Its here but i don't know wh");
+            while (contents.getDataVal(splitpos).compareTo(splitkey)<=0){
+              // System.out.println(" splitpos " + splitpos);
                splitpos++;
+            }
             splitkey = contents.getDataVal(splitpos);
          }
          else {
+          // System.out.println(" Its here but i don't know why");
             // move left, looking for first entry having that key
             while (contents.getDataVal(splitpos-1).equals(splitkey))
                splitpos--;
          }
-         Block newblk = contents.split(splitpos, -1);
-         return new DirEntry(splitkey, newblk.number());
-      }
+         // System.out.println(" Why is this spllitting " + splitpos+ " "+ contents.getFlag());
+         Block newblk = contents.split(splitpos, contents.getFlag());
+         // System.out.println("Block no:" +newblk.number());
+         contents.setFlag(newblk.number());
+         return null;
+      }       
    }
    
    private boolean tryOverflow() {
@@ -140,6 +169,19 @@ public class BTreeLeaf {
       int flag = contents.getFlag();
       if (!searchkey.equals(firstkey) || flag < 0)
          return false;
+      contents.close();
+      Block nextblk = new Block(ti.fileName(), flag);
+      contents = new BTreePage(nextblk, ti, tx);
+      currentslot = 0;
+      return true;
+   }
+
+   private boolean tryOverflow(Constant val2) {
+      Constant firstkey = contents.getDataVal(0);
+      int flag = contents.getFlag();
+      // System.out.println("Get with it "+ flag);
+      if (val2.compareTo(firstkey)<=0|| flag < 0)
+        return false;
       contents.close();
       Block nextblk = new Block(ti.fileName(), flag);
       contents = new BTreePage(nextblk, ti, tx);

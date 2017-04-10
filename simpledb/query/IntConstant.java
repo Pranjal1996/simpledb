@@ -30,6 +30,7 @@ public class IntConstant implements Constant {
    
    public int compareTo(Constant c) {
       IntConstant ic = (IntConstant) c;
+      //System.out.println(val+" Comparing with "+ic.asJavaVal());
       return val.compareTo(ic.val);
    }
    

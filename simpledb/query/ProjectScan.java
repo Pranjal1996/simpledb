@@ -56,6 +56,14 @@ public class ProjectScan implements Scan {
       else
          throw new RuntimeException("field " + fldname + " not found.");
    }
+
+   // return timestamp (long) value
+   public long getTimestamp(String fldname) {
+      if (hasField(fldname))
+         return s.getTimestamp(fldname);
+      else
+         throw new RuntimeException("field " + fldname + " not found.");
+   }
    
    /**
     * Returns true if the specified field

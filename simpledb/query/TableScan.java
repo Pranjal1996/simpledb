@@ -1,8 +1,9 @@
 package simpledb.query;
 
-import static java.sql.Types.INTEGER;
+import static java.sql.Types.*;
 import simpledb.tx.Transaction;
 import simpledb.record.*;
+import java.util.Date;
 
 /**
  * The Scan class corresponding to a table.
@@ -51,8 +52,10 @@ public class TableScan implements UpdateScan {
    public Constant getVal(String fldname) {
       if (sch.type(fldname) == INTEGER)
          return new IntConstant(rf.getInt(fldname));
-      else
+      else if((sch.type(fldname) == VARCHAR))
          return new StringConstant(rf.getString(fldname));
+      else
+         return new timestamp(rf.getTimestamp(fldname));
    }
    
    public int getInt(String fldname) {
@@ -61,6 +64,10 @@ public class TableScan implements UpdateScan {
    
    public String getString(String fldname) {
       return rf.getString(fldname);
+   }
+
+   public long getTimestamp(String fldname) {
+      return rf.getTimestamp(fldname);
    }
    
    public boolean hasField(String fldname) {
@@ -76,11 +83,34 @@ public class TableScan implements UpdateScan {
     * otherwise, the setString method is called.
     * @see simpledb.query.UpdateScan#setVal(java.lang.String, simpledb.query.Constant)
     */ 
+   // public void setVal(String fldname, Constant val) {
+   //    if (sch.type(fldname) == INTEGER)
+   //       rf.setInt(fldname, (Integer)val.asJavaVal());
+   //    else if (sch.type(fldname) == VARCHAR)
+   //      rf.setString(fldname, (String)val.asJavaVal());
+   //    // if value to be set is a timestamp
+   //    else
+   //      rf.setTimestamp(fldname, val.toString());
+   // }
+
+   // public void setVal(String fldname, Constant val) {
+   //    if (sch.type(fldname) == INTEGER)
+   //       rf.setInt(fldname, (Integer)val.asJavaVal());
+   //    else if (sch.type(fldname) == VARCHAR)
+   //      rf.setString(fldname, (String)val.asJavaVal());
+   //    // if value to be set is a timestamp
+   //    else
+   //      rf.setTimestamp(fldname, (Date)val.asJavaVal());
+   // }
+
    public void setVal(String fldname, Constant val) {
       if (sch.type(fldname) == INTEGER)
          rf.setInt(fldname, (Integer)val.asJavaVal());
+      else if (sch.type(fldname) == VARCHAR)
+        rf.setString(fldname, (String)val.asJavaVal());
+      // if value to be set is a timestamp
       else
-         rf.setString(fldname, (String)val.asJavaVal());
+        rf.setTimestamp(fldname, (Long) ((Date)val.asJavaVal()).getTime());
    }
    
    public void setInt(String fldname, int val) {

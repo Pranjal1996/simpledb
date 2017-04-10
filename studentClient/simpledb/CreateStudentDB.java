@@ -1,3 +1,5 @@
+package studentClient.simpledb;
+
 import java.sql.*;
 import simpledb.remote.SimpleDriver;
 
@@ -12,6 +14,9 @@ public class CreateStudentDB {
 			String s = "create table STUDENT(SId int, SName varchar(10), MajorId int, GradYear int)";
 			stmt.executeUpdate(s);
 			System.out.println("Table STUDENT created.");
+
+			s = "create index testindex on STUDENT(GradYear)";
+			stmt.executeUpdate(s);
 
 			s = "insert into STUDENT(SId, SName, MajorId, GradYear) values ";
 			String[] studvals = {"(1, 'joe', 10, 2004)",

@@ -59,13 +59,14 @@ public class IndexMgr {
    public Map<String,IndexInfo> getIndexInfo(String tblname, Transaction tx) {
       Map<String,IndexInfo> result = new HashMap<String,IndexInfo>();
       RecordFile rf = new RecordFile(ti, tx);
-      while (rf.next())
-         if (rf.getString("tablename").equals(tblname)) {
-         String idxname = rf.getString("indexname");
-         String fldname = rf.getString("fieldname");
-         IndexInfo ii = new IndexInfo(idxname, tblname, fldname, tx);
-         result.put(fldname, ii);
-      }
+      while (rf.next())        
+        if (rf.getString("tablename").equals(tblname)) {
+        String idxname = rf.getString("indexname");
+        String fldname = rf.getString("fieldname");
+        IndexInfo ii = new IndexInfo(idxname, tblname, fldname, tx);
+        result.put(fldname, ii);        
+        }
+        
       rf.close();
       return result;
    }

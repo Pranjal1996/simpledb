@@ -70,6 +70,17 @@ public class RecordPage {
       int position = fieldpos(fldname);
       return tx.getString(blk, position);
    }
+
+   /**
+    * Returns the timestamp (long) value stored for the
+    * specified field of the current record.
+    * @param fldname the name of the field.
+    * @return the timestamp (long) stored in that field
+    */
+   public long getTimestamp(String fldname) {
+      int position = fieldpos(fldname);
+      return tx.getTimestamp(blk, position);
+   }
    
    /**
     * Stores an integer at the specified field
@@ -91,6 +102,27 @@ public class RecordPage {
    public void setString(String fldname, String val) {
       int position = fieldpos(fldname);
       tx.setString(blk, position, val);
+   }
+
+   /**
+    * Stores a date at the specified field
+    * of the current record.
+    * @param fldname the name of the field
+    * @param val the date value stored in that field
+    */
+   // public void setTimestamp(String fldname, String val) {
+   //    int position = fieldpos(fldname);
+   //    tx.setTimestamp(blk, position, val);
+   // }
+
+   // public void setTimestamp(String fldname, Date val) {
+   //    int position = fieldpos(fldname);
+   //    tx.setTimestamp(blk, position, val);
+   // }
+
+   public void setTimestamp(String fldname, long val) {
+      int position = fieldpos(fldname);
+      tx.setTimestamp(blk, position, val);
    }
    
    /**

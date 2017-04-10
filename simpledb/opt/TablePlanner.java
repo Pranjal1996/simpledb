@@ -83,10 +83,32 @@ class TablePlanner {
    
    private Plan makeIndexSelect() {
       for (String fldname : indexes.keySet()) {
-         Constant val = mypred.equatesWithConstant(fldname);
-         if (val != null) {
+         Constant val1= null;
+         Constant val2= null;
+        // System.out.println(s + "  "+ t[1] + t[2]);
+
+        if(mypred!=null){
+          String s= mypred.toString();
+          String t[]=s.split(" ");
+          if(t.length>1){
+            if(t[1].equals("between")){
+              //System.out.println("Index mein explode kiya re baba!!");
+              val1 = mypred.equatesWithConstant(fldname);
+              val2 = mypred.equatesWithUpper(fldname);
+              //System.out.println("In TablePlanner"+ val2.asJavaVal());
+            }
+            else{
+              val1 = mypred.equatesWithConstant(fldname);
+            }
+          }
+        }
+
+        else{
+          val1 = mypred.equatesWithConstant(fldname);
+        }
+         if (val1 != null) {
             IndexInfo ii = indexes.get(fldname);
-            return new IndexSelectPlan(myplan, ii, val, tx);
+            return new IndexSelectPlan(myplan, ii, val1, val2, tx);
          }
       }
       return null;

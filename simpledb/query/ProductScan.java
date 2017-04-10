@@ -96,6 +96,19 @@ public class ProductScan implements Scan {
       else
          return s2.getString(fldname);
    }
+
+   /** 
+    * Returns the timestamp (long) value of the specified field.
+    * The value is obtained from whichever scan
+    * contains the field.
+    * @see simpledb.query.Scan#getTimestamp(java.lang.String)
+    */
+   public long getTimestamp(String fldname) {
+      if (s1.hasField(fldname))
+         return s1.getTimestamp(fldname);
+      else
+         return s2.getTimestamp(fldname);
+   }
    
    /**
     * Returns true if the specified field is in

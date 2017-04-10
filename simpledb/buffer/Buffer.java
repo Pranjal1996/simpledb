@@ -61,6 +61,26 @@ public class Buffer {
    }
 
    /**
+    * Returns the timestamp value at the specified offset of the
+    * buffer's page.
+    * If a timestamp was not stored at that location,
+    * the behavior of the method is unpredictable.
+    * @param offset the byte offset of the page
+    * @return the timestamp value at that offset
+    */
+   // public String getTimestamp(int offset) {
+   //    return contents.getTimestamp(offset);
+   // }
+
+   // public Date getTimestamp(int offset) {
+   //    return contents.getTimestamp(offset);
+   // }
+
+   public long getTimestamp(int offset) {
+      return contents.getTimestamp(offset);
+   }
+
+   /**
     * Writes an integer to the specified offset of the
     * buffer's page.
     * This method assumes that the transaction has already
@@ -100,6 +120,41 @@ public class Buffer {
       if (lsn >= 0)
 	      logSequenceNumber = lsn;
       contents.setString(offset, val);
+   }
+
+   /**
+    * Writes a timestamp to the specified offset of the
+    * buffer's page.
+    * This method assumes that the transaction has already
+    * written an appropriate log record.
+    * A negative lsn value indicates that a log record
+    * was not necessary.
+    * The buffer saves the id of the transaction
+    * and the LSN of the log record.
+    * @param offset the byte offset within the page
+    * @param val the new timestamp value to be written
+    * @param txnum the id of the transaction performing the modification
+    * @param lsn the LSN of the corresponding log record
+    */
+   // public void setTimestamp(int offset, String val, int txnum, int lsn) {
+   //    modifiedBy = txnum;
+   //    if (lsn >= 0)
+   //      logSequenceNumber = lsn;
+   //    contents.setTimestamp(offset, val);
+   // }
+
+   // public void setTimestamp(int offset, Date val, int txnum, int lsn) {
+   //    modifiedBy = txnum;
+   //    if (lsn >= 0)
+   //      logSequenceNumber = lsn;
+   //    contents.setTimestamp(offset, val);
+   // }
+
+   public void setTimestamp(int offset, long val, int txnum, int lsn) {
+      modifiedBy = txnum;
+      if (lsn >= 0)
+        logSequenceNumber = lsn;
+      contents.setTimestamp(offset, val);
    }
 
    /**

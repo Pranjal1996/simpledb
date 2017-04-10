@@ -3,6 +3,7 @@ package simpledb.file;
 import simpledb.server.SimpleDB;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.io.*;
 
 /**
  * The contents of a disk block in memory.
@@ -45,11 +46,12 @@ public class Page {
    public static final int BLOCK_SIZE = 400;
    
    /**
-    * The size of an integer in bytes.
-    * This value is almost certainly 4, but it is
+    * The size of an integer and long in bytes.
+    * These values are almost certainly 4 and 8, but it is
     * a good idea to encode this value as a constant. 
     */
    public static final int INT_SIZE = Integer.SIZE / Byte.SIZE;
+   public static final int LONG_SIZE = Long.SIZE / Byte.SIZE;
    
    /**
     * The maximum size, in bytes, of a string of length n.
@@ -156,4 +158,97 @@ public class Page {
       contents.putInt(byteval.length);
       contents.put(byteval);
    }
+
+   /**
+    * Returns the timestamp value at the specified offset of the page.
+    * If a timestamp was not stored at that location,
+    * the behavior of the method is unpredictable.
+    * @param offset the byte offset within the page
+    * @return the timestamp value at that offset
+    */
+   // public synchronized String getTimestamp(int offset) {
+   //    contents.position(offset);
+   //    int len = contents.getInt();
+   //    byte[] byteval = new byte[len];
+   //    contents.get(byteval);
+   //    return new String(byteval);
+   // }
+
+   // public synchronized Date getTimestamp(int offset) {
+
+   //    contents.position(offset);
+   //    int len = contents.getInt();
+   //    byte[] byteval = new byte[len];
+   //    contents.get(byteval);
+
+   //    Date o = new Date();
+
+   //    try {
+   //      System.out.println("1");
+   //      ByteArrayInputStream in = new ByteArrayInputStream(byteval);
+   //      System.out.println("2");
+   //      ObjectInputStream is = new ObjectInputStream(in);
+   //      System.out.println("3");
+   //      o = (Date) is.readObject();
+   //      System.out.println("4");
+      
+   //    } catch(Exception e) {
+        
+   //      System.out.println("An unexpected error occurred!");
+      
+   //    }
+
+   //    return o;
+
+   // }
+
+   public synchronized long getTimestamp(int offset) {
+      contents.position(offset);
+      return contents.getLong();
+   }
+
+   /**
+    * Writes a string to the specified offset on the page.
+    * @param offset the byte offset within the page
+    * @param val the string to be written to the page
+    */
+   // public synchronized void setTimestamp(int offset, String val) {
+   //    contents.position(offset);
+   //    byte[] byteval = val.getBytes();
+   //    contents.putInt(byteval.length);
+   //    contents.put(byteval);
+   // }
+
+ //   public synchronized void setTimestamp(int offset, Date val) {
+      
+ //      try {
+      
+ //        contents.position(offset);
+ //        System.out.println("1");
+ //        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+ //        System.out.println("2");
+ //        ObjectOutput out = new ObjectOutputStream(bos);   
+ //        System.out.println("3");
+ //        out.writeObject(val);
+ //        System.out.println("4");
+ //        byte[] byteval = bos.toByteArray();
+ //        System.out.println("5");
+ //        contents.putInt(byteval.length);
+ //        System.out.println("6");
+ //        contents.put(byteval)
+ // ;       System.out.println("7");
+
+ //      } catch(Exception e) {
+      
+ //        System.out.println("An unexpected error occurred!");
+      
+ //      }
+   
+ //   }
+
+   public synchronized void setTimestamp(int offset, long val) {
+      contents.position(offset);
+      contents.putLong(val);
+   }
+
 }

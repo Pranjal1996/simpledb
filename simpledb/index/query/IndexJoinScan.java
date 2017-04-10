@@ -107,6 +107,17 @@ public class IndexJoinScan implements Scan {
       else
          return s.getString(fldname);
    }
+
+   /**
+    * Returns the timestamp (long) value of the specified field.
+    * @see simpledb.query.Scan#getVal(java.lang.String)
+    */
+   public long getTimestamp(String fldname) {
+      if (ts.hasField(fldname))
+         return ts.getTimestamp(fldname);
+      else  
+         return s.getTimestamp(fldname);
+   }
    
    /** Returns true if the field is in the schema.
      * @see simpledb.query.Scan#hasField(java.lang.String)

@@ -68,4 +68,9 @@ public class ProjectPlan implements Plan {
    public Schema schema() {
       return schema;
    }
+
+   public void incrementnumrecs() {}
+
+   public void decrementnumrecs() {}
+   
 }

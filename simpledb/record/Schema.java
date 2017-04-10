@@ -53,7 +53,10 @@ public class Schema {
    public void addStringField(String fldname, int length) {
       addField(fldname, VARCHAR, length);
    }
-   
+   // Adds a timestamp field to the schema.
+   public void addTimestampField(String fldname) {
+      addField(fldname, TIMESTAMP, 0);
+   }
    /**
     * Adds a field to the schema having the same
     * type and length as the corresponding field

@@ -84,4 +84,9 @@ public class MaterializePlan implements Plan {
    public Schema schema() {
       return srcplan.schema();
    }
+
+   public void incrementnumrecs() {}
+
+   public void decrementnumrecs() {}
+
 }

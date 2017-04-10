@@ -23,7 +23,7 @@ public class Planner {
     * @param tx the transaction
     * @return the scan corresponding to the query plan
     */
-   public Plan createQueryPlan(String qry, Transaction tx) {
+   public Plan createQueryPlan(String qry, Transaction tx) throws RuntimeException {
       Parser parser = new Parser(qry);
       QueryData data = parser.query();
       return qplanner.createPlan(data, tx);
@@ -39,7 +39,7 @@ public class Planner {
     * @param tx the transaction
     * @return an integer denoting the number of affected records
     */
-   public int executeUpdate(String cmd, Transaction tx) {
+   public int executeUpdate(String cmd, Transaction tx) throws RuntimeException {
       Parser parser = new Parser(cmd);
       Object obj = parser.updateCmd();
       if (obj instanceof InsertData)
@@ -52,8 +52,9 @@ public class Planner {
          return uplanner.executeCreateTable((CreateTableData)obj, tx);
       else if (obj instanceof CreateViewData)
          return uplanner.executeCreateView((CreateViewData)obj, tx);
-      else if (obj instanceof CreateIndexData)
+      else if (obj instanceof CreateIndexData) {
          return uplanner.executeCreateIndex((CreateIndexData)obj, tx);
+      	}
       else
          return 0;
    }

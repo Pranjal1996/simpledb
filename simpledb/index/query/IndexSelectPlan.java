@@ -13,7 +13,7 @@ import simpledb.index.Index;
 public class IndexSelectPlan implements Plan {
    private Plan p;
    private IndexInfo ii;
-   private Constant val;
+   private Constant val1,val2;
    
    /**
     * Creates a new indexselect node in the query tree
@@ -23,10 +23,11 @@ public class IndexSelectPlan implements Plan {
     * @param val the selection constant
     * @param tx the calling transaction 
     */
-   public IndexSelectPlan(Plan p, IndexInfo ii, Constant val, Transaction tx) {
+   public IndexSelectPlan(Plan p, IndexInfo ii, Constant val1, Constant val2, Transaction tx) {
       this.p = p;
       this.ii = ii;
-      this.val = val;
+      this.val1 = val1;
+      this.val2 = val2;
    }
    
    /** 
@@ -37,7 +38,7 @@ public class IndexSelectPlan implements Plan {
       // throws an exception if p is not a tableplan.
       TableScan ts = (TableScan) p.open();
       Index idx = ii.open();
-      return new IndexSelectScan(idx, val, ts);
+      return new IndexSelectScan(idx, val1, val2, ts);
    }
    
    /**
@@ -75,4 +76,8 @@ public class IndexSelectPlan implements Plan {
    public Schema schema() {
       return p.schema(); 
    }
+
+   public void incrementnumrecs() {}
+   
+   public void decrementnumrecs() {}
 }

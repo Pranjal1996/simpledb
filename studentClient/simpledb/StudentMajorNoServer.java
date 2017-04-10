@@ -1,3 +1,5 @@
+package studentClient.simpledb;
+
 import simpledb.tx.Transaction;
 import simpledb.query.*;
 import simpledb.server.SimpleDB;

@@ -26,7 +26,7 @@ public class SimpleStatement extends StatementAdapter {
    }
    
    public int executeUpdate(String cmd) throws SQLException {
-      try {
+      try {                   
          return rstmt.executeUpdate(cmd);
       }
       catch(Exception e) {

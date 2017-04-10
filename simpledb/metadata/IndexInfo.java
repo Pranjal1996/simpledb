@@ -1,6 +1,6 @@
 package simpledb.metadata;
 
-import static java.sql.Types.INTEGER;
+import static java.sql.Types.*;
 import static simpledb.file.Page.BLOCK_SIZE;
 import simpledb.server.SimpleDB;
 import simpledb.tx.Transaction;
@@ -47,7 +47,9 @@ public class IndexInfo {
    public Index open() {
       Schema sch = schema();
       // Create new HashIndex for hash indexing
-      return new HashIndex(idxname, sch, tx);
+      //System.out.println("Returning a BTreeIndex");
+      Index idx = new BTreeIndex(idxname, sch, tx); 
+      return idx;
    }
    
    /**
@@ -66,7 +68,7 @@ public class IndexInfo {
       int rpb = BLOCK_SIZE / idxti.recordLength();
       int numblocks = si.recordsOutput() / rpb;
       // Call HashIndex.searchCost for hash indexing
-      return HashIndex.searchCost(numblocks, rpb);
+      return BTreeIndex.searchCost(numblocks, rpb);
    }
    
    /**
@@ -107,9 +109,13 @@ public class IndexInfo {
       sch.addIntField("id");
       if (ti.schema().type(fldname) == INTEGER)
          sch.addIntField("dataval");
-      else {
+      else if(ti.schema().type(fldname)== VARCHAR){
          int fldlen = ti.schema().length(fldname);
          sch.addStringField("dataval", fldlen);
+      }
+      else{
+        int fldlen = ti.schema().length(fldname);
+        sch.addTimestampField("dataval"); 
       }
       return sch;
    }

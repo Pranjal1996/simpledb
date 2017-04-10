@@ -34,6 +34,10 @@ public class IndexUpdatePlanner implements UpdatePlanner {
       Iterator<Constant> valIter = data.vals().iterator();
       for (String fldname : data.fields()) {
          Constant val = valIter.next();
+
+         if(p.recordsOutput() >= 100000)
+            throw new RuntimeException("MemoryError");
+
          System.out.println("Modify field " + fldname + " to val " + val);
          s.setVal(fldname, val);
          
@@ -44,6 +48,7 @@ public class IndexUpdatePlanner implements UpdatePlanner {
             idx.close();
          }
       }
+      p.incrementnumrecs();
       s.close();
       return 1;
    }
@@ -67,6 +72,7 @@ public class IndexUpdatePlanner implements UpdatePlanner {
          }
          // then delete the record
          s.delete();
+         p.decrementnumrecs();
          count++;
       }
       s.close();
@@ -114,6 +120,7 @@ public class IndexUpdatePlanner implements UpdatePlanner {
    }
    
    public int executeCreateIndex(CreateIndexData data, Transaction tx) {
+      //System.out.println("Inside IndexUpdatePlanner");
       SimpleDB.mdMgr().createIndex(data.indexName(), data.tableName(), data.fieldName(), tx);
       return 0;
    }

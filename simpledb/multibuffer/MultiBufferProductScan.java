@@ -94,6 +94,16 @@ public class MultiBufferProductScan implements Scan {
    public String getString(String fldname) {
       return prodscan.getString(fldname);
    }
+
+   /** 
+    * Returns the timestamp (long) value of the specified field.
+    * The value is obtained from whichever scan
+    * contains the field.
+    * @see simpledb.query.Scan#getTimestamp(java.lang.String)
+    */
+   public long getTimestamp(String fldname) {
+      return prodscan.getTimestamp(fldname);
+   }
    
    /**
     * Returns true if the specified field is in

@@ -51,4 +51,16 @@ public class BasicLogRecord {
       pos += STR_SIZE(result.length());
       return result;
    }
+
+   /**
+    * Returns the next value of the current log record, 
+    * assuming it is an integer.
+    * @return the next value of the current log record
+    */
+   public long nextTimestamp() {
+      long result = pg.getTimestamp(pos);
+      pos += LONG_SIZE;
+      return result;
+   }
+
 }

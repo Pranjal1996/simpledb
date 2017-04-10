@@ -81,4 +81,11 @@ public class SelectPlan implements Plan {
    public Schema schema() {
       return p.schema();
    }
+
+   public void incrementnumrecs() {}
+
+   public void decrementnumrecs() {
+      p.decrementnumrecs();
+   }
+   
 }

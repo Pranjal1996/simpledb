@@ -1,7 +1,7 @@
 package simpledb.remote;
 
 import simpledb.record.Schema;
-import static java.sql.Types.INTEGER;
+import static java.sql.Types.*;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -67,6 +67,7 @@ public class RemoteMetaDataImpl extends UnicastRemoteObject implements RemoteMet
     * Here, the method arbitrarily chooses 6 characters,
     * which means that integers over 999,999 will  
     * probably get displayed improperly.
+    * For a timestamp field, we require 
     * @see simpledb.remote.RemoteMetaData#getColumnDisplaySize(int)
     */
    public int getColumnDisplaySize(int column) throws RemoteException {
@@ -75,7 +76,9 @@ public class RemoteMetaDataImpl extends UnicastRemoteObject implements RemoteMet
       int fldlength = sch.length(fldname);
       if (fldtype == INTEGER)
          return 6;  // accommodate 6-digit integers
-      else
+      else if (fldtype == VARCHAR)
          return fldlength;
+      else
+         return 25; //yyyy-MM-dd HH:mm:ss has 19 characters + leaving 6 for spaces
    }
 }

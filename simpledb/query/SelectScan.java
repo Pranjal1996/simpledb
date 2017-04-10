@@ -59,6 +59,10 @@ public class SelectScan implements UpdateScan {
    public String getString(String fldname) {
       return s.getString(fldname);
    }
+
+   public long getTimestamp(String fldname) {
+      return s.getTimestamp(fldname);
+   }
    
    public boolean hasField(String fldname) {
       return s.hasField(fldname);

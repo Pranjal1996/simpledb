@@ -38,6 +38,17 @@ public class StatInfo {
    public int recordsOutput() {
       return numRecs;
    }
+
+   // increment numrecs
+   public void incrementnumrecs(){
+      numRecs++;
+   }
+
+   // decrement numrecs
+   public void decrementnumrecs() {
+    System.out.println("statinfo" + numRecs);
+      numRecs--;
+   }
    
    /**
     * Returns the estimated number of distinct values

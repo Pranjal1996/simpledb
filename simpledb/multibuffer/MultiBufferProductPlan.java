@@ -113,4 +113,9 @@ public class MultiBufferProductPlan implements Plan {
       dest.close();
       return tt;
    }
+
+   public void incrementnumrecs() {}
+
+   public void decrementnumrecs() {}
+
 }

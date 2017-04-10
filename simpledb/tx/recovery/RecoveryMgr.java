@@ -88,6 +88,41 @@ public class RecoveryMgr {
    }
 
    /**
+    * Writes a settimestamp record to the log, and returns its lsn.
+    * Updates to temporary files are not logged; instead, a
+    * "dummy" negative lsn is returned.
+    * @param buff the buffer containing the page
+    * @param offset the offset of the value in the page
+    * @param newval the value to be written
+    */
+   // public int setTimestamp(Buffer buff, int offset, String newval) {
+   //    String oldval = buff.getTimestamp(offset);
+   //    Block blk = buff.block();
+   //    if (isTempBlock(blk))
+   //       return -1;
+   //    else
+   //       return new SetTimestampRecord(txnum, blk, offset, oldval).writeToLog();
+   // }
+
+   // public int setTimestamp(Buffer buff, int offset, Date newval) {
+   //    Date oldval = buff.getTimestamp(offset);
+   //    Block blk = buff.block();
+   //    if (isTempBlock(blk))
+   //       return -1;
+   //    else
+   //       return new SetTimestampRecord(txnum, blk, offset, oldval).writeToLog();
+   // }
+
+   public int setTimestamp(Buffer buff, int offset, long newval) {
+      long oldval = buff.getTimestamp(offset);
+      Block blk = buff.block();
+      if (isTempBlock(blk))
+         return -1;
+      else
+         return new SetTimestampRecord(txnum, blk, offset, oldval).writeToLog();
+   }
+
+   /**
     * Rolls back the transaction.
     * The method iterates through the log records,
     * calling undo() for each log record it finds

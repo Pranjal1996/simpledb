@@ -50,6 +50,16 @@ public class TablePlan implements Plan {
    public int recordsOutput() {
       return si.recordsOutput();
    }
+
+   // increment numrecs
+   public void incrementnumrecs() {
+      si.incrementnumrecs();
+   }
+
+   // decrement numrecs
+   public void decrementnumrecs() {
+      si.decrementnumrecs();
+   }
    
    /**
     * Estimates the number of distinct field values in the table,

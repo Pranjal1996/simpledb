@@ -154,13 +154,9 @@ IV. Running Client Programs
   but that is overkill.  All you need is simpledb.remote.
 
   The studentClient folder contains client code for a simple university
-  student-course database.  The folder contains two subfolders, named 
-  simpledb and derby.  The simpledb subfolder contains programs that 
-  run with the SimpleDB database server. The derby subfolder is not
-  relevant here. (It contains programs for the Derby database server,
-  which can be downloaded from db.apache.org. That code is used to
-  illustrate some examples from my text "Database Design and
-  Implementation", published by John WIley.) 
+  student-course database.  The folder contains the subfolder, named 
+  simpledb.  The simpledb subfolder contains programs that 
+  run with the SimpleDB database server.
 
   The following list briefly describes the SimpleDB clients.
 
@@ -318,4 +314,3 @@ VII. The Organization of the Server Code
    The textbook "Database Design and Implementation" describes these
    packages in considerably more detail. For further information, go
    to the URL www.wiley.com/college/sciore
-   
